@@ -42,6 +42,7 @@ from madgraph import MG5DIR
 from os.path import join as pjoin
 import madgraph.iolibs.files as files
 import madgraph.iolibs.export_v4 as export_v4
+import madgraph.iolibs.export_fks as export_fks
 import madgraph.various.misc as misc
 
 from . import launch_plugin
@@ -313,16 +314,15 @@ class PLUGIN_ProcessExporter_MadEvent(PLUGIN_ProcessExporter):
 
 #------------------------------------------------------------------------------------
 
-class SIMD_ProcessExporter(PLUGIN_ProcessExporter_MadEvent):
+class SIMD_ProcessExporterMixin:
+    """Mixin class for SIMD common LO and NLO"""
 
     # Default class for the run_card to use
     run_card_class = launch_plugin.CPPRunCard
 
-    def change_output_args(args, cmd):
+    def change_output_args(self, args, cmd):
         """ """
         #cmd._export_format = "madevent_forplugin"
-        cmd._export_format = 'madevent'
-        cmd._export_plugin = FortranExporterBridge
         args.append('--hel_recycling=False')
         args.append('--me_exporter=standalone_simd')
         if 'vector_size' not in ''.join(args):
@@ -331,9 +331,91 @@ class SIMD_ProcessExporter(PLUGIN_ProcessExporter_MadEvent):
             args.append('--nb_wrap=1')
         return args
 
-class FortranExporterBridge(export_v4.ProcessExporterFortranMEGroup):
+class GPU_ProcessExporterMixin:
+    """Mixin class for GPU common LO and NLO"""
 
-    def write_auto_dsig_file(self, writer, matrix_element, proc_id = ""):
+    # Default class for the run_card to use
+    run_card_class = launch_plugin.GPURunCard
+
+    def change_output_args(self, args, cmd):
+        """ """
+        args.append('--hel_recycling=False')
+        args.append('--me_exporter=standalone_cuda')
+        if 'vector_size' not in ''.join(args):
+            args.append('--vector_size=32')
+        if 'nb_wrap' not in ''.join(args):
+            args.append('--nb_wrap=512')
+        return args
+
+    def finalize(self, matrix_element, cmdhistory, MG5options, outputflag):
+        misc.sprint("enter dedicated function")
+        out = super().finalize(matrix_element, cmdhistory, MG5options, outputflag)
+        # OM change RunCard class to have default for GPU
+        text = open(pjoin(self.dir_path, 'bin', 'internal', 'launch_plugin.py'), 'r').read()
+        text = text.replace('RunCard = CPPRunCard', 'RunCard = GPURunCard')
+        open(pjoin(self.dir_path, 'bin', 'internal', 'launch_plugin.py'), 'w').write(text)
+        return out
+
+class SIMD_ProcessExporterLO(SIMD_ProcessExporterMixin, PLUGIN_ProcessExporter_MadEvent):
+    """Class to deal with specific SIMD export in leading order"""
+    def change_output_args(self, args, cmd):
+        cmd._export_format = "madevent"
+        cmd._export_plugin = FortranExporterBridgeLO
+        return super().change_output_args(args, cmd)
+
+class GPU_ProcessExporterLO(GPU_ProcessExporterMixin, PLUGIN_ProcessExporter_MadEvent):
+    """Class to deal with specific GPU export in leading order"""
+    def change_output_args(self, args, cmd):
+        cmd._export_format = "madevent"
+        cmd._export_plugin = FortranExporterBridgeLO
+        return super().change_output_args(args, cmd)
+
+class SIMD_ProcessExporterNLO(SIMD_ProcessExporterMixin, PLUGIN_ProcessExporter_MadEvent):
+    """Class to deal with specific SIMD export in next-to-leading order"""
+    def change_output_args(self, args, cmd):
+        cmd._export_format = "NLO"
+        cmd._export_plugin = FortranExporterBridgeNLO
+        return super().change_output_args(args, cmd)
+
+class GPU_ProcessExporterNLO(GPU_ProcessExporterMixin, PLUGIN_ProcessExporter_MadEvent):
+    """Class to deal with specific GPU export in next-to-leading order"""
+    def change_output_args(self, args, cmd):
+        cmd._export_format = "NLO"
+        cmd._export_plugin = FortranExporterBridgeNLO
+        return super().change_output_args(args, cmd)
+
+class GPU_SIMD_Factory:
+    _REGISTRY = {
+        ( "lo" , "simd" ): SIMD_ProcessExporterLO,
+        ( "lo" , "gpu"  ): GPU_ProcessExporterLO,
+        ( "nlo", "simd" ): SIMD_ProcessExporterNLO,
+        ( "nlo", "gpu"  ): GPU_ProcessExporterNLO,
+    }
+    @classmethod
+    def build(cls, args, order, **kwargs):
+        kind = args[0].replace("madevent_","")
+        exporter = cls._REGISTRY[(order, kind)]
+        return exporter
+
+#------------------------------------------------------------------------------------
+
+# Mixin class for common plugin stuff
+# it must be first in the inheritance list, so that super() is resolved
+# on the right class
+# example:
+# class Mother:
+#     def func():
+#         pass
+# class Mixin:
+#     def func():
+#         self._pre()    # specific stuff of the plugin
+#         super().func() # will call Mother.func()
+#         self._post()   # specific stuff of the plugin
+# class Child(Mixin, Mother):
+#     def func():
+#         super().func() # will call Mixin.func()
+class FortranExporterBridgeMixin:
+    def write_auto_dsig_file(self, writer, matrix_element, proc_id=""):
         replace_dict,context = super().write_auto_dsig_file(False, matrix_element, proc_id)
         replace_dict['additional_header'] = """
       INTEGER IEXT
@@ -379,33 +461,12 @@ CALL COUNTERS_SMATRIX1MULTI_START( -1, VECSIZE_USED )  ! fortranMEs=-1"""
         else:
             return replace_dict, context
 
-#------------------------------------------------------------------------------------
+# LO bridge
+class FortranExporterBridgeLO(FortranExporterBridgeMixin,
+                              export_v4.ProcessExporterFortranMEGroup):
+    pass
 
-class GPU_ProcessExporter(PLUGIN_ProcessExporter_MadEvent):
-
-    # Default class for the run_card to use
-    run_card_class = launch_plugin.GPURunCard
-
-    def change_output_args(args, cmd):
-        """ """
-        cmd._export_format = 'madevent'
-        cmd._export_plugin = FortranExporterBridge
-
-        args.append('--hel_recycling=False')
-        args.append('--me_exporter=standalone_cuda')
-        if 'vector_size' not in ''.join(args):
-            args.append('--vector_size=32')
-        if 'nb_wrap' not in ''.join(args):
-            args.append('--nb_wrap=512')
-        return args
-
-    def finalize(self, matrix_element, cmdhistory, MG5options, outputflag):
-        misc.sprint("enter dedicated function")
-        out = super().finalize(matrix_element, cmdhistory, MG5options, outputflag)
-        # OM change RunCard class to have default for GPU
-        text = open(pjoin(self.dir_path, 'bin', 'internal', 'launch_plugin.py'), 'r').read()
-        text = text.replace('RunCard = CPPRunCard', 'RunCard = GPURunCard')
-        open(pjoin(self.dir_path, 'bin', 'internal', 'launch_plugin.py'), 'w').write(text)
-        return out
-
-#------------------------------------------------------------------------------------
+# NLO bridge
+class FortranExporterBridgeNLO(FortranExporterBridgeMixin,
+                               export_fks.ProcessExporterFortranFKS):
+    pass
