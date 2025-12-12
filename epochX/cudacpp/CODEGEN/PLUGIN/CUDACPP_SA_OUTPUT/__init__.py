@@ -36,14 +36,14 @@ else:
     ###import PLUGIN.CUDACPP_OUTPUT.output as output # AV modify this to also allow MG5aMC_PLUGIN
     __import__('%s.output'%PLUGIN_NAME)
     output = sys.modules['%s.output'%PLUGIN_NAME]
-    new_output = { 'madevent_simd' : output.SIMD_ProcessExporter,
-                   'madevent_gpu' : output.GPU_ProcessExporter,
+    new_output = { 'madevent_simd' : output.GPU_SIMD_Factory,
+                   'madevent_gpu' : output.GPU_SIMD_Factory,
                    'standalone_cudacpp' : output.PLUGIN_ProcessExporter,
                    # the following one are used for the second exporter class 
                    # (not really needed so far but interesting if need
                    #  specialization in the futur) 
-                   'standalone_simd' :  output.SIMD_ProcessExporter,
-                   'standalone_cuda' :  output.GPU_ProcessExporter,
+                   'standalone_simd' :  output.GPU_SIMD_Factory,
+                   'standalone_cuda' :  output.GPU_SIMD_Factory,
                   }
 
     # 2. Define new way to handle the cluster.
