@@ -20,6 +20,8 @@
 
 #include "Parameters_%(model_name)s.h"
 
+#include "../SubProcesses/MemoryAccess.h"
+
 #include <cassert>
 //#include <cmath>
 //#include <cstdlib>

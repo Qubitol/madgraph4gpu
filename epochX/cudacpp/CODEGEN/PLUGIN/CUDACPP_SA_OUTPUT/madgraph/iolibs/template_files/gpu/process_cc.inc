@@ -16,13 +16,13 @@
 
 #include "GpuRuntime.h"
 %(hel_amps_h)s
+#include "MemoryAccess.h"
 #include "MemoryAccessAmplitudes.h"
 #include "MemoryAccessChannelIds.h"
 #include "MemoryAccessCouplings.h"
 #include "MemoryAccessCouplingsFixed.h"
 #include "MemoryAccessGs.h"
 #include "MemoryAccessMatrixElements.h"
-#include "MemoryAccessMomenta.h"
 #include "MemoryAccessWavefunctions.h"
 #include "color_sum.h"
 

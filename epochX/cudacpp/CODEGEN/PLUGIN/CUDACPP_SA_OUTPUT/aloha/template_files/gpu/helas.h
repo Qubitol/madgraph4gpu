@@ -20,9 +20,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  ixxxxx( const fptype momenta[], // input: momenta
+  ixxxxx( MomentaView momenta, // input: momenta
           const fptype fmass,     // input: fermion mass
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -34,9 +34,9 @@
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == +PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  ipzxxx( const fptype momenta[], // input: momenta
+  ipzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -48,9 +48,9 @@
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == -PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  imzxxx( const fptype momenta[], // input: momenta
+  imzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -62,9 +62,9 @@
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PT > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  ixzxxx( const fptype momenta[], // input: momenta
+  ixzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -75,9 +75,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction vc[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  vxxxxx( const fptype momenta[], // input: momenta
+  vxxxxx( MomentaView momenta, // input: momenta
           const fptype vmass,     // input: vector boson mass
           const int nhel,         // input: -1, 0 (only if vmass!=0) or +1 (helicity of vector boson)
           const int nsv,          // input: +1 (final) or -1 (initial)
@@ -88,9 +88,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction sc[3] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  sxxxxx( const fptype momenta[], // input: momenta
+  sxxxxx( MomentaView momenta, // input: momenta
           //const fptype,                 // WARNING: input "smass" unused (missing in Fortran) - scalar boson mass
           //const int,                    // WARNING: input "nhel" unused (missing in Fortran) - scalar has no helicity!
           const int nss,          // input: +1 (final) or -1 (initial)
@@ -101,9 +101,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  oxxxxx( const fptype momenta[], // input: momenta
+  oxxxxx( MomentaView momenta, // input: momenta
           const fptype fmass,     // input: fermion mass
           const int nhel,         // input: -1, 0 (only if vmass!=0) or +1 (helicity of vector boson)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -115,9 +115,9 @@
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == +PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  opzxxx( const fptype momenta[], // input: momenta
+  opzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -129,9 +129,9 @@
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == -PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  omzxxx( const fptype momenta[], // input: momenta
+  omzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -142,9 +142,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ INLINE void
-  oxzxxx( const fptype momenta[], // input: momenta
+  oxzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -155,9 +155,9 @@
   //==========================================================================
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  ixxxxx( const fptype momenta[], // input: momenta
+  ixxxxx( MomentaView momenta, // input: momenta
           const fptype fmass,     // input: fermion mass
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -169,10 +169,10 @@
     // Variables xxxDENOM are a hack to avoid division-by-0 FPE while preserving speed (#701 and #727)
     // Variables xxxDENOM are declared as 'volatile' to make sure they are not optimized away on clang! (#724)
     // A few additional variables are declared as 'volatile' to avoid sqrt-of-negative-number FPEs (#736)
-    const fptype_sv& pvec0 = M_ACCESS::kernelAccessIp4IparConst( momenta, 0, ipar );
-    const fptype_sv& pvec1 = M_ACCESS::kernelAccessIp4IparConst( momenta, 1, ipar );
-    const fptype_sv& pvec2 = M_ACCESS::kernelAccessIp4IparConst( momenta, 2, ipar );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec0 = momenta[ipar].en;
+    const fptype_sv& pvec1 = momenta[ipar].px;
+    const fptype_sv& pvec2 = momenta[ipar].py;
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fi = W_ACCESS::kernelAccess( wavefunctions );
     fi[0] = cxmake( -pvec0 * (fptype)nsf, -pvec3 * (fptype)nsf );
     fi[1] = cxmake( -pvec1 * (fptype)nsf, -pvec2 * (fptype)nsf );
@@ -294,9 +294,9 @@
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == +PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  ipzxxx( const fptype momenta[], // input: momenta
+  ipzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -304,7 +304,7 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fi = W_ACCESS::kernelAccess( wavefunctions );
     fi[0] = cxmake( -pvec3 * (fptype)nsf, -pvec3 * (fptype)nsf );
     fi[1] = cxzero_sv();
@@ -330,9 +330,9 @@
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == -PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  imzxxx( const fptype momenta[], // input: momenta
+  imzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -340,7 +340,7 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fi = W_ACCESS::kernelAccess( wavefunctions );
     fi[0] = cxmake( pvec3 * (fptype)nsf, -pvec3 * (fptype)nsf );
     fi[1] = cxzero_sv();
@@ -366,9 +366,9 @@
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PT > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  ixzxxx( const fptype momenta[], // input: momenta
+  ixzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -376,10 +376,10 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec0 = M_ACCESS::kernelAccessIp4IparConst( momenta, 0, ipar );
-    const fptype_sv& pvec1 = M_ACCESS::kernelAccessIp4IparConst( momenta, 1, ipar );
-    const fptype_sv& pvec2 = M_ACCESS::kernelAccessIp4IparConst( momenta, 2, ipar );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec0 = momenta[ipar].en;
+    const fptype_sv& pvec1 = momenta[ipar].px;
+    const fptype_sv& pvec2 = momenta[ipar].py;
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fi = W_ACCESS::kernelAccess( wavefunctions );
     //fi[0] = cxmake( -pvec0 * nsf, -pvec2 * nsf ); // AV: BUG! not the same as ixxxxx
     //fi[1] = cxmake( -pvec0 * nsf, -pvec1 * nsf ); // AV: BUG! not the same as ixxxxx
@@ -411,9 +411,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction vc[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  vxxxxx( const fptype momenta[], // input: momenta
+  vxxxxx( MomentaView momenta, // input: momenta
           const fptype vmass,     // input: vector boson mass
           const int nhel,         // input: -1, 0 (only if vmass!=0) or +1 (helicity of vector boson)
           const int nsv,          // input: +1 (final) or -1 (initial)
@@ -425,10 +425,10 @@
     // Variables xxxDENOM are a hack to avoid division-by-0 FPE while preserving speed (#701 and #727)
     // Variables xxxDENOM are declared as 'volatile' to make sure they are not optimized away on clang! (#724)
     // A few additional variables are declared as 'volatile' to avoid sqrt-of-negative-number FPEs (#736)
-    const fptype_sv& pvec0 = M_ACCESS::kernelAccessIp4IparConst( momenta, 0, ipar );
-    const fptype_sv& pvec1 = M_ACCESS::kernelAccessIp4IparConst( momenta, 1, ipar );
-    const fptype_sv& pvec2 = M_ACCESS::kernelAccessIp4IparConst( momenta, 2, ipar );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec0 = momenta[ipar].en;
+    const fptype_sv& pvec1 = momenta[ipar].px;
+    const fptype_sv& pvec2 = momenta[ipar].py;
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* vc = W_ACCESS::kernelAccess( wavefunctions );
     const fptype sqh = fpsqrt( 0.5 ); // AV this is > 0!
     const fptype hel = nhel;
@@ -550,9 +550,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction sc[3] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  sxxxxx( const fptype momenta[], // input: momenta
+  sxxxxx( MomentaView momenta, // input: momenta
           //const fptype,                 // WARNING: input "smass" unused (missing in Fortran) - scalar boson mass
           //const int,                    // WARNING: input "nhel" unused (missing in Fortran) - scalar has no helicity!
           const int nss,          // input: +1 (final) or -1 (initial)
@@ -560,10 +560,10 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec0 = M_ACCESS::kernelAccessIp4IparConst( momenta, 0, ipar );
-    const fptype_sv& pvec1 = M_ACCESS::kernelAccessIp4IparConst( momenta, 1, ipar );
-    const fptype_sv& pvec2 = M_ACCESS::kernelAccessIp4IparConst( momenta, 2, ipar );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec0 = momenta[ipar].en;
+    const fptype_sv& pvec1 = momenta[ipar].px;
+    const fptype_sv& pvec2 = momenta[ipar].py;
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* sc = W_ACCESS::kernelAccess( wavefunctions );
     sc[2] = cxmake( 1 + fptype_sv{ 0 }, 0 );
     sc[0] = cxmake( pvec0 * (fptype)nss, pvec3 * (fptype)nss );
@@ -575,9 +575,9 @@
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  oxxxxx( const fptype momenta[], // input: momenta
+  oxxxxx( MomentaView momenta, // input: momenta
           const fptype fmass,     // input: fermion mass
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -589,10 +589,10 @@
     // Variables xxxDENOM are a hack to avoid division-by-0 FPE while preserving speed (#701 and #727)
     // Variables xxxDENOM are declared as 'volatile' to make sure they are not optimized away on clang! (#724)
     // A few additional variables are declared as 'volatile' to avoid sqrt-of-negative-number FPEs (#736)
-    const fptype_sv& pvec0 = M_ACCESS::kernelAccessIp4IparConst( momenta, 0, ipar );
-    const fptype_sv& pvec1 = M_ACCESS::kernelAccessIp4IparConst( momenta, 1, ipar );
-    const fptype_sv& pvec2 = M_ACCESS::kernelAccessIp4IparConst( momenta, 2, ipar );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec0 = momenta[ipar].en;
+    const fptype_sv& pvec1 = momenta[ipar].px;
+    const fptype_sv& pvec2 = momenta[ipar].py;
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fo = W_ACCESS::kernelAccess( wavefunctions );
     fo[0] = cxmake( pvec0 * (fptype)nsf, pvec3 * (fptype)nsf );
     fo[1] = cxmake( pvec1 * (fptype)nsf, pvec2 * (fptype)nsf );
@@ -715,9 +715,9 @@
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == +PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  opzxxx( const fptype momenta[], // input: momenta
+  opzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -725,7 +725,7 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fo = W_ACCESS::kernelAccess( wavefunctions );
     fo[0] = cxmake( pvec3 * (fptype)nsf, pvec3 * (fptype)nsf );
     fo[1] = cxzero_sv();
@@ -751,9 +751,9 @@
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == -PZ > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  omzxxx( const fptype momenta[], // input: momenta
+  omzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -761,7 +761,7 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fo = W_ACCESS::kernelAccess( wavefunctions );
     fo[0] = cxmake( -pvec3 * (fptype)nsf, pvec3 * (fptype)nsf ); // remember pvec0 == -pvec3
     fo[1] = cxzero_sv();
@@ -790,9 +790,9 @@
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PT > 0)
-  template<class M_ACCESS, class W_ACCESS>
+  template<class W_ACCESS>
   __host__ __device__ void
-  oxzxxx( const fptype momenta[], // input: momenta
+  oxzxxx( MomentaView momenta, // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
@@ -800,10 +800,10 @@
           const int ipar )        // input: particle# out of npar
   {
     mgDebug( 0, __FUNCTION__ );
-    const fptype_sv& pvec0 = M_ACCESS::kernelAccessIp4IparConst( momenta, 0, ipar );
-    const fptype_sv& pvec1 = M_ACCESS::kernelAccessIp4IparConst( momenta, 1, ipar );
-    const fptype_sv& pvec2 = M_ACCESS::kernelAccessIp4IparConst( momenta, 2, ipar );
-    const fptype_sv& pvec3 = M_ACCESS::kernelAccessIp4IparConst( momenta, 3, ipar );
+    const fptype_sv& pvec0 = momenta[ipar].en;
+    const fptype_sv& pvec1 = momenta[ipar].px;
+    const fptype_sv& pvec2 = momenta[ipar].py;
+    const fptype_sv& pvec3 = momenta[ipar].pz;
     cxtype_sv* fo = W_ACCESS::kernelAccess( wavefunctions );
     fo[0] = cxmake( pvec0 * (fptype)nsf, pvec3 * (fptype)nsf );
     fo[1] = cxmake( pvec1 * (fptype)nsf, pvec2 * (fptype)nsf );
