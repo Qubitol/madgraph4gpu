@@ -76,7 +76,7 @@ class AoSoAView {
   // SANITY CHECK: check that neppM is a power of two
   static_assert( ispoweroftwo( neppM ), "neppM is not a power of 2" );
 
-  __host__ __device__ int pageStride(const int ievt) {
+  __host__ __device__ int pageStride(const int ievt) const {
     const int iPage = ievt / neppM;
     const int pageStride = iPage * InnerView::eventDim * neppM;
     return pageStride;
