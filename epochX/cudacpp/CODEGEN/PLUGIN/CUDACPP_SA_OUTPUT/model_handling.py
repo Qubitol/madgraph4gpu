@@ -1504,7 +1504,7 @@ class PLUGIN_OneProcessExporter(PLUGIN_export_cpp.OneProcessExporterGPU):
   {
 #ifdef MGONGPUCPP_GPUIMPL
 #if defined(__CUDACC__) && (CUDART_VERSION >= 13000)
-    asm volatile (".pragma \"enable_smem_spilling\";");
+    asm volatile (".pragma \\"enable_smem_spilling\\";");
 #endif
     using namespace mg5amcGpu;
     using M_ACCESS = DeviceAccessMomenta;         // non-trivial access: buffer includes all events
