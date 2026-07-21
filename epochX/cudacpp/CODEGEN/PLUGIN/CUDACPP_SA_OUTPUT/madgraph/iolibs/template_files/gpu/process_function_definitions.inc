@@ -120,7 +120,7 @@ namespace mg5amcCpu
   //--------------------------------------------------------------------------
 
 #ifdef MGONGPUCPP_GPUIMPL
-  __device__ INLINE unsigned int
+  __device__ MGONGPU_HELAS_INLINE unsigned int
   gpu_channelId( const unsigned int* allChannelIds )
   {
     unsigned int channelId = 0; // disable multichannel single-diagram enhancement unless allChannelIds != nullptr
