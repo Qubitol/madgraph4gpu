@@ -624,13 +624,19 @@ else
   $(error Unknown FPTYPE='$(FPTYPE)': only 'd', 'f' and 'm' are supported)
 endif
 
-# Set the build flags appropriate to each HELINL choice (example: "make HELINL=1")
+# Set the build flags appropriate to each HELINL choice:
+#   HELINL=1  forces inlining
+#   HELINL=0  leaves the decision to the compiler
+#   HELINL=-1 prevents inlining
 $(info HELINL='$(HELINL)')
 ifeq ($(HELINL),1)
   CXXFLAGS += -DMGONGPU_INLINE_HELAMPS
   GPUFLAGS += -DMGONGPU_INLINE_HELAMPS
+else ifeq ($(HELINL),-1)
+  CXXFLAGS += -DMGONGPU_NOINLINE_HELAMPS
+  GPUFLAGS += -DMGONGPU_NOINLINE_HELAMPS
 else ifneq ($(HELINL),0)
-  $(error Unknown HELINL='$(HELINL)': only '0' and '1' are supported)
+  $(error Unknown HELINL='$(HELINL)': only '-1', '0' and '1' are supported)
 endif
 
 # Set the build flags appropriate to each HRDCOD choice (example: "make HRDCOD=1")
