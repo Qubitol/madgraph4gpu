@@ -9,148 +9,158 @@
 !==========================================================================
   //--------------------------------------------------------------------------
 
-#ifdef MGONGPU_INLINE_HELAMPS
-#define INLINE inline
-#define ALWAYS_INLINE __attribute__( ( always_inline ) )
+#if defined(MGONGPU_INLINE_HELAMPS) && defined(MGONGPU_NOINLINE_HELAMPS)
+#error "Conflicting HELAS inlining options"
+#elif defined(MGONGPU_INLINE_HELAMPS)
+#if defined(MGONGPUCPP_GPUIMPL)
+#define MGONGPU_HELAS_INLINE __forceinline__
 #else
-#define INLINE
-#define ALWAYS_INLINE
+#define MGONGPU_HELAS_INLINE inline __attribute__( ( always_inline ) )
+#endif
+#elif defined(MGONGPU_NOINLINE_HELAMPS)
+#if defined(MGONGPUCPP_GPUIMPL)
+#define MGONGPU_HELAS_INLINE __noinline__
+#else
+#define MGONGPU_HELAS_INLINE __attribute__( ( noinline ) )
+#endif
+#else
+#define MGONGPU_HELAS_INLINE
 #endif
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   ixxxxx( const fptype momenta[], // input: momenta
           const fptype fmass,     // input: fermion mass
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == +PZ > 0)
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   ipzxxx( const fptype momenta[], // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == -PZ > 0)
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   imzxxx( const fptype momenta[], // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fi[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PT > 0)
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   ixzxxx( const fptype momenta[], // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction vc[6] from the input momenta[npar*4*nevt]
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   vxxxxx( const fptype momenta[], // input: momenta
           const fptype vmass,     // input: vector boson mass
           const int nhel,         // input: -1, 0 (only if vmass!=0) or +1 (helicity of vector boson)
           const int nsv,          // input: +1 (final) or -1 (initial)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction sc[3] from the input momenta[npar*4*nevt]
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   sxxxxx( const fptype momenta[], // input: momenta
           //const fptype,                 // WARNING: input "smass" unused (missing in Fortran) - scalar boson mass
           //const int,                    // WARNING: input "nhel" unused (missing in Fortran) - scalar has no helicity!
           const int nss,          // input: +1 (final) or -1 (initial)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   oxxxxx( const fptype momenta[], // input: momenta
           const fptype fmass,     // input: fermion mass
           const int nhel,         // input: -1, 0 (only if vmass!=0) or +1 (helicity of vector boson)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == +PZ > 0)
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   opzxxx( const fptype momenta[], // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   // ASSUMPTIONS: (FMASS == 0) and (PX == PY == 0 and E == -PZ > 0)
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   omzxxx( const fptype momenta[], // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //--------------------------------------------------------------------------
 
   // Compute the output wavefunction fo[6] from the input momenta[npar*4*nevt]
   template<class M_ACCESS, class W_ACCESS>
-  __host__ __device__ INLINE void
+  __host__ __device__ MGONGPU_HELAS_INLINE void
   oxzxxx( const fptype momenta[], // input: momenta
           //const fptype fmass,   // [skip: ASSUME fermion mass==0]
           const int nhel,         // input: -1 or +1 (helicity of fermion)
           const int nsf,          // input: +1 (particle) or -1 (antiparticle)
           fptype wavefunctions[], // output: wavefunctions
           const int ipar          // input: particle# out of npar
-          ) ALWAYS_INLINE;
+          );
 
   //==========================================================================
 

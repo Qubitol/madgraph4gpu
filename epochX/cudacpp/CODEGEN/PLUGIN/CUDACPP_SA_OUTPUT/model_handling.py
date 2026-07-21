@@ -240,8 +240,8 @@ class PLUGIN_ALOHAWriter(aloha_writers.ALOHAWriterForGPU):
         out.write('  %(comment)s\n  %(template)s\n  %(prefix)s void\n  %(name)s( const %(args)s,\n%(indent)s%(output)s )%(suffix)s' %
                   {'comment': comment, # AV - add comment
                    'template': template, # AV - add template
-                   'prefix': self.prefix + ( ' INLINE' if 'is_h' in mode else '' ), # AV - add INLINE
-                   'suffix': ( ' ALWAYS_INLINE' if 'is_h' in mode else '' ), # AV - add ALWAYS_INLINE
+                   'prefix': self.prefix + ( ' MGONGPU_HELAS_INLINE' if 'is_h' in mode else '' ), # AV - add INLINE
+                   'suffix': "",
                    'indent':indent, 'output':output, 'name': name,
                    'args': (',\n' + indent + 'const ').join(args)}) # AV - add const, add indent
         if 'is_h' in mode:
@@ -1500,7 +1500,7 @@ class PLUGIN_OneProcessExporter(PLUGIN_export_cpp.OneProcessExporterGPU):
                    const int ievt00                   // input: first event number in current C++ event page (for CUDA, ievt depends on threadid)
 #endif
                    )
-  //ALWAYS_INLINE // attributes are not permitted in a function definition
+  // attributes are not permitted in a function definition
   {
 #ifdef MGONGPUCPP_GPUIMPL
 #if defined(__CUDACC__) && (CUDART_VERSION >= 13000)
